@@ -12,7 +12,8 @@ const UNSUCCESSFUL_RESULT_KEY = "FAILURE";
  * @returns {{ "Arnie Quote": string }}
  */
 const createSuccessfulResult = (body) => {
-  const message = body?.message ?? '';
+  // Good use case for use optional chaining and nullish coalescing here from node 14+
+  const message = body && body.message || '';
   return {
     [SUCCESSFUL_RESULT_KEY]: message
   };
@@ -24,7 +25,8 @@ const createSuccessfulResult = (body) => {
  * @returns {{ "FAILURE": string }}
  */
  const createFailedResult = (body) => {
-  const message = body?.message ?? '';
+   // Good use case for use optional chaining and nullish coalescing here from node 14+
+   const message = body && body.message || '';
   return {
     [UNSUCCESSFUL_RESULT_KEY]: message
   };
@@ -36,7 +38,7 @@ const createSuccessfulResult = (body) => {
  * @returns {boolean}
  */
 const isResponseBodyParseable = (response) => {
-  return response?.body && typeof response?.body === 'string';
+  return response && response.body && typeof response.body === 'string';
 }
 
 /**
