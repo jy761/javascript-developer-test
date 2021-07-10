@@ -31,7 +31,17 @@ const createSuccessfulResult = (body) => {
 }
 
 /**
- * Performs a HTTP GET call against all passed in urls.
+ * Validates whether a HTTP response can have its body field parsed
+ * @param {Object} response HTTP response to check the parseability of its body
+ * @returns {boolean}
+ */
+const isResponseBodyParseable = (response) => {
+  return response?.body && typeof response?.body === 'string';
+}
+
+/**
+ * Performs a HTTP GET call against all passed in urls. 
+ * Assumes urls do not need to be input checked.
  * @param {string[]} urls 
  * @returns {Promise<({ "Arnie Quote": string } | { "FAILURE": string })[]>}
  */
@@ -40,7 +50,7 @@ const getArnieQuotes = async (urls) => {
     try {
       const response = await httpGet(url);
 
-      if (!response.body || typeof response.body !== 'string') {
+      if (!isResponseBodyParseable(response)) {
         throw new Error('Malformed body in response');
       }
 
@@ -58,7 +68,7 @@ const getArnieQuotes = async (urls) => {
       return createFailedResult({ message: 'Unhandled error' });
     }
   });
-  
+
   return Promise.all(quoteRequests);
 };
 
